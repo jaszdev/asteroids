@@ -67,8 +67,9 @@ public class Asteroid : MonoBehaviour
     void AddColliders()
     {
         var polCollider = gameObject.AddComponent<PolygonCollider2D>();
-        gameObject.AddComponent<CompositeCollider2D>();
+        var compCollider = gameObject.AddComponent<CompositeCollider2D>();
         polCollider.usedByComposite = true;
+        compCollider.isTrigger = true;
     }
 
     float Map(float x, float in_min, float in_max, float out_min, float out_max)

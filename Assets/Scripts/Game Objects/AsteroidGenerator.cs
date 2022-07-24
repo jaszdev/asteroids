@@ -13,6 +13,9 @@ public class AsteroidGenerator : MonoBehaviour
     public float minSpeed;
     public float maxSpeed;
 
+    public float minWaitTime;
+    public float maxWaitTime;
+
     public GameObject asteroidPrefab;
     public Transform container;
 
@@ -20,6 +23,7 @@ public class AsteroidGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        transform.localPosition = Vector3.zero;
         StartCoroutine(GenererateAsteroid());
     }
 
@@ -46,14 +50,23 @@ public class AsteroidGenerator : MonoBehaviour
         {
             Vector2 displacement = Random.insideUnitCircle.normalized * Random.Range(minRadius, maxRadius);
             Vector2 position = (Vector2)target.position + displacement;
-            Vector2 targetPos = Random.insideUnitCircle.normalized * Random.Range(0f, targetRadius);
+            Vector2 targetPos = (Vector2)transform.position + Random.insideUnitCircle.normalized * Random.Range(0f, targetRadius);
             Vector2 direction = (targetPos - position).normalized;
             Vector2 velocity = direction * Random.Range(minSpeed, maxSpeed);
 
             GameObject asteroid = Instantiate(asteroidPrefab, position, Quaternion.identity, container);
             asteroid.GetComponent<Rigidbody2D>().velocity = velocity;
 
-            yield return new WaitForSeconds(Random.Range(0f, 1f));
+            yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
+        }
+    }
+
+    public void Clear()
+    {
+        var asteroids = container.GetComponentsInChildren<Asteroid>();
+        foreach(var asteroid in asteroids)
+        {
+            Destroy(asteroid.gameObject);
         }
     }
 

@@ -35,6 +35,8 @@ public class Vision : MonoBehaviour
 
     private bool InSight(Transform _transform)
     {
+        if (_transform.CompareTag("Wall") || _transform.CompareTag("Loot")) return false;
+
         var dir = _transform.position - transform.position;
         var ang = Mathf.Atan2(dir.y, dir.x);
         return initAngle <= ang && ang <= endAngle;
@@ -78,7 +80,10 @@ public class Vision : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.position + endVector);
 
         Gizmos.color = Color.magenta;
-        foreach (var obj in InSightObjects) Gizmos.DrawLine(transform.position, obj.transform.position);
+        foreach (var obj in InSightObjects)
+        {
+            Gizmos.DrawLine(transform.position, obj.transform.position);
+        }
     }
 
 }
